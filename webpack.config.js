@@ -1,5 +1,7 @@
 // webpack.config.js
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin"); // connect plugin
 
 module.exports = {
   devtool: "inline-source-map",
@@ -11,8 +13,9 @@ module.exports = {
     filename: "main.js",
     publicPath: "",
   },
-  mode: "development",
+  target: ["web", "es5"],
   stats: "errors-only",
+  mode: "development",
   devServer: {
     static: path.resolve(__dirname, "./dist"),
     compress: true,
@@ -24,13 +27,16 @@ module.exports = {
   module: {
     rules: [
       {
-        // a regular expression that searches for all js files
-        test: /.js$/,
-        // all files must be processed by babel-loader
+        test: /\.js$/,
         loader: "babel-loader",
-        // exclude the node_modules folder, we don't need to process files in it
         exclude: "/node_modules/",
       },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+    new CleanWebpackPlugin(), // use plugin
+  ],
 };
