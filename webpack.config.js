@@ -1,7 +1,8 @@
 // webpack.config.js
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin"); // connect plugin
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   devtool: "inline-source-map",
@@ -31,12 +32,22 @@ module.exports = {
         loader: "babel-loader",
         exclude: "/node_modules/",
       },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+          },
+        ],
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
-    new CleanWebpackPlugin(), // use plugin
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
   ],
 };
